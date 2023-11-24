@@ -1,0 +1,15 @@
+{
+  "name": "timetutor",
+  "version": "1.0.0",
+  "description": "A service that reminds you of what you have learned",
+  "scripts": {
+    "build:dev": "set NODE_ENV=development&& node timetutor.js",
+    "build:product": "set NODE_ENV=production&& node timetutor.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
