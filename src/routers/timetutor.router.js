@@ -12,4 +12,7 @@ router.route('/testPage')
 router.route('/init')
 .get(timetutorService.init);
 
+router.route('/checkLogin')
+.get(timetutorService.checkLogin);
+
 module.exports = router;
