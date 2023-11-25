@@ -26,6 +26,8 @@ function getQueryParam(name) {
 function init(data){
     $('#loginBtn').click(function() {window.location.href = data.loginURL + "?redirection="+window.location.href;});
     setToken(data);
+
+    $('.comming-soon').click(function() {alert("Comming soon!")});
 }
 function setToken(data){
     if (data.accessToken != 'null' && data.accessToken != undefined)

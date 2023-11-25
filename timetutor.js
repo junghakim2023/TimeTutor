@@ -7,7 +7,7 @@ dotenv.config({ path: `.${process.env.NODE_ENV}.env`});
 var app = express();
 const routes = require('./src/routers/timetutor.router'); 
 app.use(routes);
-app.use('/js', express.static(__dirname + "/res/js"))
+app.use('/res', express.static(__dirname + "/res"))
 
 var port = process.env.PORT
 app.listen(port, ()=>{
