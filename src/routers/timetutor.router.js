@@ -15,4 +15,10 @@ router.route('/init')
 router.route('/checkLogin')
 .get(timetutorService.checkLogin);
 
+router.route('/manager')
+.get(timetutorService.managerPage);
+
+router.route('/schedular')
+.get(timetutorService.schedularPage);
+
 module.exports = router;
