@@ -37,12 +37,13 @@
 
   <script>
     initPage();      
+    checkMainPageLogin();
   </script>
 <body>  
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Training Reminder</a>
+      <a class="navbar-brand" href="/">Time tutor</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -58,9 +59,13 @@
             <a class="nav-link" href="/schedular" tabindex="-1">Schedule Wizard</a>
           </li>
         </ul>
+        <li class="nav-link active" id="welcomeText" style="display: none;">Welcome! </li>    
 		  <button class="btn btn-outline-success comming-soon">Signup</button>
-          <span style="width: 10px;"></span>
+          
+          <span style="width: 10px;"></span>          
           <button class="btn btn-outline-success" id="loginBtn">Login</button>
+          <button onclick="logout()" class="btn btn-outline-success" style="display: none;" id="logoutBtn">Logout</button>
+          
       </div>
     </div>
   </nav>
