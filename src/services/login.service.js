@@ -14,12 +14,15 @@ const checkLogin = function(req, res){
     var valid = tokenStatus.INVALID_TOKEN;
     if (accessToken != 'null' && refreshToken != 'null' 
     && accessToken != undefined && refreshToken != undefined){
+
         var accessValid = resolveJwtToken(accessToken);
         if (accessValid == tokenStatus.EXPIRED)
-        valid = tokenStatus.EXPIRED;
-        var refreshValid = resolveJwtToken(refreshToken);
-        if (accessValid && refreshValid)
-            valid = tokenStatus.VALID; 
+            valid = tokenStatus.EXPIRED;
+        else{
+            var refreshValid = resolveJwtToken(refreshToken);
+            if (accessValid && refreshValid)
+                valid = tokenStatus.VALID; 
+        }
     }
     res.send(valid);
     return ;
@@ -32,7 +35,7 @@ function resolveJwtToken(token){
     jwt.verify(token, secretKey, { algorithms: ['HS256'],encoding: 'base64' }, (err, decoded) => {
     if (err) {
         console.error('JWT verification failed:', err);        
-        if (err.toString().indexOf('Expired'))
+        if (err.toString().indexOf('Expired') != -1)
             valid =  tokenStatus.EXPIRED;
     }else
         valid = tokenStatus.VALID;    
