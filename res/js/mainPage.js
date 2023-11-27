@@ -36,12 +36,12 @@ function setToken(data){
         localStorage.setItem('refreshToken', data.refreshToken);
 }
 function initPage() {
-    const tokenIndex = getQueryParam('tokenIndex');
+    const tokenKey = getQueryParam('tokenKey');
     $.ajax({
         url : '/init',
         type : 'GET',
         data : {
-            tokenIndex : tokenIndex
+            tokenKey : tokenKey
         },
         success : function(data, status, request) {
             init(data);      

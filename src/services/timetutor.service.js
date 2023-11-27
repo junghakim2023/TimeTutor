@@ -26,8 +26,8 @@ function setCommonData(data){
 // initData : login page URL, accessToken, refresh Token
 const init = function(req, res){
 
-    var tokenIndex = req.query.tokenIndex;
-    if (tokenIndex === undefined || tokenIndex == 'null'){
+    var tokenKey = req.query.tokenKey;
+    if (tokenKey === undefined || tokenKey == 'null'){
         // go to login page
         var data = new Object();
         setCommonData(data);
@@ -35,7 +35,7 @@ const init = function(req, res){
         return;
     }
 
-    axios.get(process.env.LOGIN_URL+"/token/get?tokenIndex="+tokenIndex)
+    axios.get(process.env.LOGIN_URL+"/token/get?tokenKey="+tokenKey)
     .then(response=>{       
         var data = new Object();
         setCommonData(data);
