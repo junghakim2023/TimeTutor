@@ -1,14 +1,32 @@
 var cloneMe;
-var cloneYou;
+var cloneTeacher;
 
 cloneMe = $('#sampleYou').clone();
-cloneYou = $('#sampleMe').clone();
+cloneTeacher = $('#sampleTeacher').clone();
 
-function addTeacheMessage(msg){
-    var chatFromYou = cloneYou.clone();
-    chatFromYou.find("#sampleYouText").text(msg);
+$('#sampleYou').remove();
+$('#sampleTeacher').remove();
+$('#sendButton').click(function() {
+    inputText();
+});
+
+function addTeacherMessage(message){
+    if (message == '' || message ==null)
+        return;
+    var chatFromTeacher = cloneTeacher.clone();
+    chatFromTeacher.find("#sampleTeacherText").text(message);
+    chatFromTeacher.css("visibility", "visible")
+    chatFromTeacher.appendTo("#chattingArea");
+    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
+}
+
+function addMessage(message){
+    var chatFromYou = cloneMe.clone();
+    chatFromYou.find("#sampleYouText").text(message);
+    
     chatFromYou.css("visibility", "visible")
     chatFromYou.appendTo("#chattingArea");
+    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
 }
 
 function sendMessage(msg){
@@ -16,9 +34,10 @@ function sendMessage(msg){
         url : '/chat/say',
         type : 'POST',
         contentType: 'application/json',
+        headers: getHeaderToken(),
         data : JSON.stringify({ message: msg }),
-        success : function(data, status, request) {
-            addTeacheMessage(data.message);         
+        success : function(message, status, request) {
+            addTeacherMessage(message);         
       },
         error:function(request, textStatus, error){
             console.log(JSON.stringify(request))
@@ -31,31 +50,33 @@ function sendMessage(msg){
 function inputText(){
     if ($('#chatInput').val() == "" || $('#chatInput').val() == null)
         return;
-    var chatFromMe = cloneMe.clone();
-    chatFromMe.find("#sampleYouText").text($('#chatInput').val());
     
-    chatFromMe.css("visibility", "visible")
-    chatFromMe.appendTo("#chattingArea");
-
-    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
+    addMessage($('#chatInput').val());
     sendMessage($('#chatInput').val());
     $('#chatInput').val("");
-    
 }
-$('#sampleYou').remove();
-$('#sampleMe').remove();
-$('#sendButton').click(function() {
-    inputText();
-});
 
-function setPreviousMessage(){
+
+function setPreviousMessage(chatList){
+    if (chatList == null || chatList.length <= 0)
+        return;       
+
+        for (const chatData of chatList) {
+            if (chatData.is_me == true)
+                addMessage(chatData.contents);
+            else
+                addTeacherMessage(chatData.contents);
+        };
+
+    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
 }
 
 function getPreviousMessage(){
     $.ajax({
-        url : '/getAllMessage',
+        url : '/chat/get/previous/message',
         type : 'GET',
-        data : {index : 0},
+        headers: getHeaderToken(),
+        data : {offset : 0},
         success : function(data, status, request) {
            setPreviousMessage(data);
       },

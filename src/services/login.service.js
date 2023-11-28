@@ -7,6 +7,12 @@ const tokenStatus = {
     EXPIRED : "EXPIRED"
 }
 
+const checkLoginRequest = function(req, res){
+    var valid = checkLogin(req, res);
+    res.send(valid);
+    return ;
+}
+
 const checkLogin = function(req, res){
     var accessToken = req.headers['authorization']; 
     var refreshToken = req.headers['authorization-refresh']; 
@@ -24,8 +30,12 @@ const checkLogin = function(req, res){
                 valid = tokenStatus.VALID; 
         }
     }
-    res.send(valid);
-    return ;
+    return valid;
+}
+
+const getUserData = function(req){
+    var accessToken = req.headers['authorization']; 
+    return getResolvedJwtTokenData(accessToken);
 }
 
 function resolveJwtToken(token){
@@ -72,7 +82,7 @@ function resolveJwtToken(token){
         var data = new Object();      
         accessToken = response.data.accessToken
         refreshToken = response.data.refreshToken
-        console.log(accessToken);
+
         var accessValid = resolveJwtToken(accessToken);
         var refreshValid = resolveJwtToken(refreshToken);
 
@@ -95,4 +105,4 @@ function resolveJwtToken(token){
     });
   }
 
-  module.exports = {checkLogin, getTokenInfo}
+  module.exports = {tokenStatus, checkLoginRequest, checkLogin, getTokenInfo, getUserData}

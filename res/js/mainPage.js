@@ -57,16 +57,11 @@ function renewAccessToken(){
 }
 
 function checkLogin(){
-    var accessToken = localStorage.getItem('accessToken');
-    accessToken = accessToken.replace("Bearer ", "");
-    
-    var refreshToken = localStorage.getItem('refreshToken');
-    refreshToken = refreshToken.replace("Bearer ", "");
     var valid = false;
     $.ajax({
         'url' : '/checkLogin',
         'type' : 'GET',
-        'headers': {'Authorization':  accessToken, 'Authorization-Refresh' :  refreshToken},
+        'headers': getHeaderToken(),
         'success' : function(data, status, request) {
 
             if (data == 'VALID') valid = true;
