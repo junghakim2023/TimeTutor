@@ -10,14 +10,24 @@ $('#sendButton').click(function() {
     inputText();
 });
 
-function addTeacherMessage(message){
+function addTeacherMessage(message, slow){
     if (message == '' || message ==null)
         return;
-    var chatFromTeacher = cloneTeacher.clone();
-    chatFromTeacher.find("#sampleTeacherText").text(message);
-    chatFromTeacher.css("visibility", "visible")
-    chatFromTeacher.appendTo("#chattingArea");
-    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
+
+    var say = function(){
+            var chatFromTeacher = cloneTeacher.clone();
+            chatFromTeacher.find("#sampleTeacherText").text(message);
+            chatFromTeacher.css("visibility", "visible")
+            chatFromTeacher.appendTo("#chattingArea");
+            $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
+    }
+
+    if (slow){
+        setTimeout(() => {  say(); }, 800);
+    }else
+        say();
+
+
 }
 
 function addMessage(message){
@@ -37,7 +47,7 @@ function sendMessage(msg){
         headers: getHeaderToken(),
         data : JSON.stringify({ message: msg }),
         success : function(message, status, request) {
-            addTeacherMessage(message);         
+            addTeacherMessage(message, true);         
       },
         error:function(request, textStatus, error){
             console.log(JSON.stringify(request))
@@ -78,7 +88,31 @@ function getPreviousMessage(){
         headers: getHeaderToken(),
         data : {offset : 0},
         success : function(data, status, request) {
-           setPreviousMessage(data);
+            if (data == null || data.length <= 0){
+                var welcome = "Welcome to TimeTutor! " + localStorage.getItem("userName");
+                addTeacherMessage(welcome, true);
+                sendMessageToTeacher(welcome);
+            }
+            else
+                setPreviousMessage(data);
+      },
+        error:function(request, textStatus, error){
+            console.log(JSON.stringify(request))
+            console.log(JSON.stringify(textStatus))
+            console.log(JSON.stringify(error))
+        }
+        });
+}
+
+function sendMessageToTeacher(msg){
+    $.ajax({
+        url : '/chat/say/teacher',
+        type : 'POST',
+        contentType: 'application/json',
+        headers: getHeaderToken(),
+        data : JSON.stringify({ message: msg }),
+        success : function(message, status, request) {
+            //        
       },
         error:function(request, textStatus, error){
             console.log(JSON.stringify(request))
