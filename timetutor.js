@@ -8,8 +8,11 @@ var app = express();
 const routes = require('./src/routers/timetutor.router'); 
 app.use(routes);
 
-const loginroutes = require('./src/routers/login.router'); 
-app.use(loginroutes);
+const loginRoutes = require('./src/routers/login.router'); 
+app.use(loginRoutes);
+
+const chatRoutes = require('./src/routers/chat.router'); 
+app.use('/chat', chatRoutes);
 
 app.use('/res', express.static(__dirname + "/res"))
 
