@@ -12,6 +12,7 @@ const loginRoutes = require('./src/routers/login.router');
 app.use(loginRoutes);
 
 const chatRoutes = require('./src/routers/chat.router'); 
+app.use(express.json());
 app.use('/chat', chatRoutes);
 
 app.use('/res', express.static(__dirname + "/res"))

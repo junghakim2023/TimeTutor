@@ -7,6 +7,6 @@ router.route('/get/previous/message')
 .get(chatService.getPreviouseMessage);
 
 router.route('/say')
-.get(chatService.say);
+.post(chatService.say);
 
 module.exports = router;

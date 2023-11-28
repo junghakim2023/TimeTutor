@@ -13,9 +13,10 @@ function addTeacheMessage(msg){
 
 function sendMessage(msg){
     $.ajax({
-        url : '/message',
+        url : '/chat/say',
         type : 'POST',
-        data : {message : msg},
+        contentType: 'application/json',
+        data : JSON.stringify({ message: msg }),
         success : function(data, status, request) {
             addTeacheMessage(data.message);         
       },
@@ -32,12 +33,13 @@ function inputText(){
         return;
     var chatFromMe = cloneMe.clone();
     chatFromMe.find("#sampleYouText").text($('#chatInput').val());
-    $('#chatInput').val("");
+    
     chatFromMe.css("visibility", "visible")
     chatFromMe.appendTo("#chattingArea");
 
     $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
-    sendMessage(msg);
+    sendMessage($('#chatInput').val());
+    $('#chatInput').val("");
     
 }
 $('#sampleYou').remove();
