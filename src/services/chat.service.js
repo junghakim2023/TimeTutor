@@ -12,7 +12,7 @@ const getPreviouseMessage = function(req, res){
     var user = loginModule.getUserData(req);
     const chatList =  chatSequelize.findAll({
             where: { user_index: user.userIdx },
-            order: [['createdAt', 'ASC']],
+            order: [['createdAt', 'DESC']],
             offset: req.body.offset,
             limit: 20
           }).then(chatList => {
