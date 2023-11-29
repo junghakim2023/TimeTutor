@@ -1,6 +1,6 @@
 var cloneMe;
 var cloneTutor;
-
+var questionNumber;
 cloneMe = $('#sampleYou').clone();
 cloneTutor = $('#sampleTutor').clone();
 
@@ -56,9 +56,7 @@ function getPreviousMessage(){
                 setPreviousMessage(data);
       },
         error:function(request, textStatus, error){
-            console.log(JSON.stringify(request));
-            console.log(JSON.stringify(textStatus));
-            console.log(JSON.stringify(error));
+            printError(request, textStatus, error)
         }
         });
 }
@@ -97,7 +95,8 @@ function qnaMakingBtnClick (){
 
 
 function qnaBtnClick(){
-    changeTo("qna");
+    requestQuestion();
+    
 }
 
 function rescheduleBtnClick(){
@@ -119,5 +118,103 @@ function guildBtnClick(){
 
 function sayToGuest(){
     var message = 'Hello, I am TimeTutor. You need to log in to use the service. ';
-    addTutorMessage(message);
+    addTutorMessage(message, true, true);
+}
+
+function sendAnswer(){
+    if (questionNumber == undefined){
+        var message = "Wait until Question to be prepared";
+        addTutorMessage(message, true, true);
+    }
+
+    var answer = $('#chatInput').val();
+    if (answer == "" || answer == null){
+        var message = "Enter your answer";
+        addTutorMessage(message, true, true);
+        return;
+    }
+    $.ajax({
+        url : '/qna/set/answer',
+        type : 'POST',
+        data: answer,
+        headers: getHeaderToken(),
+        data : {offset : 0},
+        success : function(data, status, request) {
+            addTutorMessage(data.message, true, true);
+            changeTo("menu");
+      },
+        error:function(request, textStatus, error){
+            printError(request, textStatus, error)
+        }
+        });
+}
+
+function requestQuestion(){
+    $.ajax({
+        url : '/qna/get/question',
+        type : 'POST',
+        headers: getHeaderToken(),
+        success : function(data, status, request) {
+            questionNumber = data.questionNumber;
+
+            addTutorMessage(data.question, true, true);
+            changeTo("qna");
+      },
+        error:function(request, textStatus, error){
+            printError(request, textStatus, error)
+
+            var message = "There is no availiable Question. Make question first!"
+            addTutorMessage(message, true, true);
+        }
+        });
+}
+
+function sendQnA(){
+    var questionInput = $('#questionInput').val();
+    if (questionInput == "" || questionInput == null){
+        var message = "Enter your question";
+        addTutorMessage(message, true, true);
+        return;
+    }
+
+    var answerInput = $('#answerInput').val();
+    if (answerInput == "" || answerInput == null){
+        var message = "Enter your answer";
+        addTutorMessage(message, true, true);
+        return;
+    }
+    
+    $.ajax({
+        url : '/qna/set/qna',
+        type : 'POST',
+        headers: getHeaderToken(),
+        data : {questionInput,answerInput},
+        success : function(data, status, request) {
+            var message = "I get your question and answer successfully!"
+            addTutorMessage(message, true, true);
+            changeTo("menu");
+      },
+      error:function(request, textStatus, error){
+        printError(request, textStatus, error)
+    }
+    });
+}
+
+function sendTimeSet(){
+    var times = $('.timeText');
+
+    $.ajax({
+        url : '/qna/set/alarmTime',
+        type : 'POST',
+        data: times,
+        headers: getHeaderToken(),
+        success : function(data, status, request) {
+            var message = "I set your schedules successfully!"
+            addTutorMessage(message, true, true);
+            changeTo("menu");
+      },
+      error:function(request, textStatus, error){
+        printError(request, textStatus, error)
+    }
+    });
 }

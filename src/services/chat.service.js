@@ -2,7 +2,6 @@ const db = require('../../models/index');
 const chatSequelize = db.chatSequelize; 
 
 const loginModule = require('../services/login.service');
-const replyModule = require('../services/reply.service');
 
 const getPreviouseMessage = function(req, res){
     if (loginModule.tokenStatus['VALID'] != loginModule.checkLogin(req, res)){
@@ -39,8 +38,22 @@ const say = function(req, res){
     var user = loginModule.getUserData(req);
     var replyMessage=null;
     chatSequelize.createChat(user.userName, user.userIdx, true, req.body.message)
-    replyMessage = replyModule.reply(user.userIdx, req.body.message);
+    replyMessage = reply(user.userIdx, req.body.message);
     return res.send(replyMessage);
+}
+
+const reply = function(userIndex, message){
+    var replyMessage = null;
+
+    if (message == 'hello')
+        replyMessage = 'hello';
+
+    if (replyMessage == null)
+        return null;
+
+    chatSequelize.createChat("Tutor", userIndex, false, replyMessage);
+
+    return replyMessage;
 }
 
 module.exports = {getPreviouseMessage, say, tutorSay}

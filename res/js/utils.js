@@ -20,3 +20,9 @@ function checkAuthToken(){
     return true;
 }
 
+function printError(request, textStatus, error){
+    console.log(JSON.stringify(request));
+    console.log(JSON.stringify(textStatus));
+    console.log(JSON.stringify(error));
+}
+

@@ -1,5 +1,5 @@
 
-function addTutorMessage(message, slow){
+function addTutorMessage(message, slow, sendToDB){
     if (message == '' || message ==null)
         return;
 
@@ -15,6 +15,10 @@ function addTutorMessage(message, slow){
         setTimeout(() => {  say(); }, 800);
     }else
         say();
+
+    
+    if (sendToDB)
+        sendTutorMessage(message);
 
 
 }

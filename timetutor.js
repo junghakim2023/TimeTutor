@@ -15,6 +15,10 @@ const chatRoutes = require('./src/routers/chat.router');
 app.use(express.json());
 app.use('/chat', chatRoutes);
 
+const qnaRoutes = require('./src/routers/qna.router'); 
+app.use(express.json());
+app.use('/qna', qnaRoutes);
+
 app.use('/res', express.static(__dirname + "/res"))
 
 var port = process.env.PORT
