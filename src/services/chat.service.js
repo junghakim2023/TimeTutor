@@ -6,8 +6,7 @@ const replyModule = require('../services/reply.service');
 
 const getPreviouseMessage = function(req, res){
     if (loginModule.tokenStatus['VALID'] != loginModule.checkLogin(req, res)){
-         res.status(502).send("invalid user");
-         return;
+        return res.status(502).send("invalid user");
     }
     var user = loginModule.getUserData(req);
     const chatList =  chatSequelize.findAll({
@@ -24,18 +23,18 @@ const getPreviouseMessage = function(req, res){
           });
 }
 
-const teacherSay = function(req, res){
+const tutorSay = function(req, res){
     if (loginModule.tokenStatus['VALID'] != loginModule.checkLogin(req, res)){
         return res.status(502).send("invalid user");
     }
     var user = loginModule.getUserData(req);
-    chatSequelize.createChat("Teacher", user.userIdx, false, req.body.message)
+    chatSequelize.createChat("Tutor", user.userIdx, false, req.body.message)
     return res.send('ok');
 }
 
 const say = function(req, res){
     if (loginModule.tokenStatus['VALID'] != loginModule.checkLogin(req, res)){
-        res.status(502).send("invalid user");
+        return res.status(502).send("invalid user");
     }
     var user = loginModule.getUserData(req);
     var replyMessage=null;
@@ -44,4 +43,4 @@ const say = function(req, res){
     return res.send(replyMessage);
 }
 
-module.exports = {getPreviouseMessage, say, teacherSay}
+module.exports = {getPreviouseMessage, say, tutorSay}

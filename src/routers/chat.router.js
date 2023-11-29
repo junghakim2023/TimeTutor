@@ -9,8 +9,8 @@ router.route('/get/previous/message')
 router.route('/say')
 .post(chatService.say);
 
-router.route('/say/teacher')
-.post(chatService.teacherSay);
+router.route('/say/tutor')
+.post(chatService.tutorSay);
 
 
 module.exports = router;

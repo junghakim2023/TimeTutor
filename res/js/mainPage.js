@@ -36,7 +36,7 @@ function renewAccessToken(){
     var refresh = localStorage.getItem('refreshToken');
     refresh = refresh.substr(7);
     $.ajax({
-        'url' : "http://localhost:8081/login/token/refresh/accessToken",
+        'url' : loginServerURL+"/token/refresh/accessToken",
         'type' : 'POST',
         'header': {
             'Access-Control-Allow-Origin': "*"
@@ -63,7 +63,6 @@ function checkLogin(){
         'type' : 'GET',
         'headers': getHeaderToken(),
         'success' : function(data, status, request) {
-
             if (data == 'VALID') valid = true;
             else if(data == 'EXPIRED')
                 renewAccessToken();      

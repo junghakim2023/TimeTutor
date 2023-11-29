@@ -10,7 +10,7 @@ const reply = function(userIndex, message){
     if (replyMessage == null)
         return null;
 
-    chatSequelize.createChat("Teacher", userIndex, false, replyMessage);
+    chatSequelize.createChat("Tutor", userIndex, false, replyMessage);
 
     return replyMessage;
 }
