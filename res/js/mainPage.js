@@ -42,13 +42,15 @@ function renewAccessToken(){
           },
         'data' : {refresh},
         'success' : function(data, status, request) {
-            setToken(data);
-            setLoginStatus(true);
+            if (data.accessToken != 'null' && data.accessToken != undefined){
+                localStorage.setItem('accessToken', "Bearer " + data.accessToken);
+                window.location.href = "/";
+            }
+            
         },
         'error':function(request, textStatus, error){
             pringError(request, textStatus, error)
             logout();
-            setLoginStatus(false);
         }
         });
 }

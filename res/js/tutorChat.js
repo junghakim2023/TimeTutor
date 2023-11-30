@@ -162,6 +162,7 @@ function sendAnswer(){
     addTutorMessage("Answer : " + originalAnswer, true);
     addTutorMessage("Your Answer : " + answer, true);
 
+    $('#chatInput').val('')
     originalAnswer = null;
     changeTo("menu");
 }
@@ -219,6 +220,8 @@ function sendQnA(){
             var message = "I get your question and answer successfully!"
             sendTutorMessage(message);
             changeTo("menu");
+            $('#questionInput').val('')
+            $('#answerInput').val('')
       },
       error:function(request, textStatus, error){
         printError(request, textStatus, error)
