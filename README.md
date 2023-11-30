@@ -5,7 +5,8 @@ A service that reminds you of what you have learned
 ![image](https://github.com/junghakim2023/TimeTutor/assets/150854918/27680c4b-cb31-4002-be17-5e5a0d9bacf9)
 
 # Publish
-- AWS (canada centre)
+- Jenkins (Version 2.426.1)
+- AWS (Amazon Linux)
 - RDS (mysql)
 
 # Setup
