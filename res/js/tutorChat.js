@@ -90,17 +90,29 @@ function changeTo(area){
 }
 
 function qnaMakingBtnClick (){
+    if (!checkAuthToken()){
+        sayToGuest();
+        return;
+    }
     changeTo("qnaMaking");
 }
 
 
 function qnaBtnClick(){
+    if (!checkAuthToken()){
+        sayToGuest();
+        return;
+    }
     sendMyMessage("Give me question!");
     requestQuestion();
     
 }
 
 function rescheduleBtnClick(){
+    if (!checkAuthToken()){
+        sayToGuest();
+        return;
+    }
     getTimeSet();
     changeTo("reschedule");
 }
@@ -108,19 +120,19 @@ function rescheduleBtnClick(){
 async function guideBtnClick(){
     var message = 'Hello, I am TimeTutor. When you create a questionnaire, I will randomly select questions from the questionnaire at set times and ask you.';
     sendTutorMessage(message);
-    await sleep(2000);
+    await sleep(1200);
 
     message = '1. Click the “Make QnA” button to register a question.';
     sendTutorMessage(message);
-    await sleep(2000);
+    await sleep(1200);
     
     message = '2. Click the “ReScheduleing Alarm” button to be notified of the time you need to ask your question.';
     sendTutorMessage(message);
-    await sleep(2000);
+    await sleep(1200);
     
     message = '3. If you need this explanation again, click the “Guide” button!';
     sendTutorMessage(message);
-    await sleep(2000);
+    await sleep(1200);
     
     message = '4. Of course, if necessary, you can click the “QnA” button right away to start Q&A!';
     sendTutorMessage(message);
@@ -128,7 +140,7 @@ async function guideBtnClick(){
 
 function sayToGuest(){
     var message = 'Hello, I am TimeTutor. You need to log in to use the service. ';
-    sendTutorMessage(message);
+    addTutorMessage(message, true);
 }
 
 function sendAnswer(){

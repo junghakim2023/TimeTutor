@@ -9,6 +9,7 @@ function logout(){
     localStorage.setItem('refreshToken', null);
     localStorage.setItem('userName', null);
     setLoginStatus(false);
+    window.location.href="/";
 }
 function init(data){
     loginServerURL = data.loginURL;
