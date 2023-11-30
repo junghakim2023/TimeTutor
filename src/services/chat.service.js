@@ -17,7 +17,6 @@ const getPreviouseMessage = function(req, res){
              return res.send(chatList);
           })
           .catch(error => {
-            console.log(error);
             return res.status(500).send(error);
           });
 }
@@ -27,7 +26,8 @@ const tutorSay = function(req, res){
         return res.status(502).send("invalid user");
     }
     var user = loginModule.getUserData(req);
-    chatSequelize.createChat("Tutor", user.userIdx, false, req.body.message)
+    if (req.body.message != null && req.body.message != '')
+        chatSequelize.createChat("Tutor", user.userIdx, false, req.body.message)
     return res.send('ok');
 }
 
@@ -36,8 +36,10 @@ const say = function(req, res){
         return res.status(502).send("invalid user");
     }
     var user = loginModule.getUserData(req);
+    if (req.body.message != null && req.body.message != '')
+        chatSequelize.createChat(user.userName, user.userIdx, true, req.body.message)
+        
     var replyMessage=null;
-    chatSequelize.createChat(user.userName, user.userIdx, true, req.body.message)
     replyMessage = reply(user.userIdx, req.body.message);
     return res.send(replyMessage);
 }

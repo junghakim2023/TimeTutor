@@ -12,7 +12,14 @@ router.route('/set/qna')
 router.route('/get/question')
 .post(qnaService.getQuestion);
 
-router.route('/qna/set/answer')
+
+router.route('/delete/question')
+.get(qnaService.deleteQnA);
+
+router.route('/set/answer')
 .post(qnaService.setAnswer)
+
+router.route('/get/alarmTime')
+.get(qnaService.getAlarmTime)
 
 module.exports = router;

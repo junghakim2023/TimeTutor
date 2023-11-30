@@ -1,5 +1,5 @@
 
-function addTutorMessage(message, slow, sendToDB){
+function addTutorMessage(message, slow, questionNum){
     if (message == '' || message ==null)
         return;
 
@@ -8,19 +8,21 @@ function addTutorMessage(message, slow, sendToDB){
             chatFromTutor.find("#sampleTutorText").text(message);
             chatFromTutor.css("visibility", "visible")
             chatFromTutor.appendTo("#chattingArea");
+            if (questionNum != undefined){
+                chatFromTutor.find(".deleteBtn").attr("data", questionNum);
+                chatFromTutor.find(".deleteBtn").css("display","block");
+            }
             $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
     }
 
     if (slow){
-        setTimeout(() => {  say(); }, 800);
-    }else
+        setTimeout(() => {
+              say(); 
+                     
+        }, 800);
+    }else{
         say();
-
-    
-    if (sendToDB)
-        sendTutorMessage(message);
-
-
+    }
 }
 
 function addMyMessage(message){
@@ -32,7 +34,7 @@ function addMyMessage(message){
     $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
 }
 
-function senMyMessage(msg){
+function sendMyMessage(msg){
     $.ajax({
         url : '/chat/say',
         type : 'POST',
@@ -40,26 +42,23 @@ function senMyMessage(msg){
         headers: getHeaderToken(),
         data : JSON.stringify({ message: msg }),
         success : function(message, status, request) {
-            addTutorMessage(message, true);         
+            addMyMessage(msg, true);         
       },
         error:function(request, textStatus, error){
-            console.log(JSON.stringify(request))
-            console.log(JSON.stringify(textStatus))
-            console.log(JSON.stringify(error))
-
+            pringError(request, textStatus, error);
             alert("You need to log in to use the service");
             window.location.href="/";
         }
         });
 }
 
-function sendTutorMessage(msg){
+function sendTutorMessage(message, questionNum){
     $.ajax({
         url : '/chat/say/tutor',
         type : 'POST',
         contentType: 'application/json',
         headers: getHeaderToken(),
-        data : JSON.stringify({ message: msg }),
+        data : JSON.stringify({ message }),
         success : function(message, status, request) {
             //        
       },
@@ -70,5 +69,5 @@ function sendTutorMessage(msg){
         }
         });
 
-        addTutorMessage(msg, true);
+    addTutorMessage(message, true, questionNum);
 }

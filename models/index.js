@@ -15,5 +15,6 @@ db.Sequelize = Sequelize;
 
 // model 정의
 db.chatSequelize = require('../models/chat.model')(sequelize, Sequelize); 
-
+db.qnaSequelize = require('../models/qna.model')(sequelize, Sequelize);
+db.alarmSequelize = require('../models/alarm.model')(sequelize, Sequelize);
 module.exports = db;

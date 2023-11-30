@@ -1,6 +1,6 @@
 var cloneMe;
 var cloneTutor;
-var questionNumber;
+var originalAnswer;
 cloneMe = $('#sampleYou').clone();
 cloneTutor = $('#sampleTutor').clone();
 
@@ -95,76 +95,87 @@ function qnaMakingBtnClick (){
 
 
 function qnaBtnClick(){
+    sendMyMessage("Give me question!");
     requestQuestion();
     
 }
 
 function rescheduleBtnClick(){
+    getTimeSet();
     changeTo("reschedule");
 }
 
-function guildBtnClick(){
+async function guideBtnClick(){
     var message = 'Hello, I am TimeTutor. When you create a questionnaire, I will randomly select questions from the questionnaire at set times and ask you.';
     sendTutorMessage(message);
+    await sleep(2000);
+
     message = '1. Click the “Make QnA” button to register a question.';
     sendTutorMessage(message);
+    await sleep(2000);
+    
     message = '2. Click the “ReScheduleing Alarm” button to be notified of the time you need to ask your question.';
     sendTutorMessage(message);
+    await sleep(2000);
+    
     message = '3. If you need this explanation again, click the “Guide” button!';
     sendTutorMessage(message);
+    await sleep(2000);
+    
     message = '4. Of course, if necessary, you can click the “QnA” button right away to start Q&A!';
     sendTutorMessage(message);
 }
 
 function sayToGuest(){
     var message = 'Hello, I am TimeTutor. You need to log in to use the service. ';
-    addTutorMessage(message, true, true);
+    sendTutorMessage(message);
 }
 
 function sendAnswer(){
-    if (questionNumber == undefined){
+    if (originalAnswer == '' || originalAnswer == null || originalAnswer == undefined){
         var message = "Wait until Question to be prepared";
-        addTutorMessage(message, true, true);
+        addTutorMessage(message, true);
+        return;
     }
 
     var answer = $('#chatInput').val();
     if (answer == "" || answer == null){
         var message = "Enter your answer";
-        addTutorMessage(message, true, true);
+        addTutorMessage(message, true);
         return;
     }
-    $.ajax({
-        url : '/qna/set/answer',
-        type : 'POST',
-        data: answer,
-        headers: getHeaderToken(),
-        data : {offset : 0},
-        success : function(data, status, request) {
-            addTutorMessage(data.message, true, true);
-            changeTo("menu");
-      },
-        error:function(request, textStatus, error){
-            printError(request, textStatus, error)
-        }
-        });
+
+    sendMyMessage("A : " + answer);
+
+    addTutorMessage("Answer : " + originalAnswer, true);
+    addTutorMessage("Your Answer : " + answer, true);
+
+    originalAnswer = null;
+    changeTo("menu");
 }
 
 function requestQuestion(){
     $.ajax({
         url : '/qna/get/question',
         type : 'POST',
+        contentType: 'application/json',
         headers: getHeaderToken(),
         success : function(data, status, request) {
-            questionNumber = data.questionNumber;
+            if (data == null || data == ''){
+                var message = "There is no availiable Question. Make question first!"
+                sendTutorMessage(message, true, true);
+                return;
+            }
 
-            addTutorMessage(data.question, true, true);
+            originalAnswer = data.answer;
+            sendTutorMessage("Q : " + data.question, data.idx);
             changeTo("qna");
       },
         error:function(request, textStatus, error){
             printError(request, textStatus, error)
 
             var message = "There is no availiable Question. Make question first!"
-            addTutorMessage(message, true, true);
+            sendTutorMessage(message);
         }
         });
 }
@@ -173,25 +184,28 @@ function sendQnA(){
     var questionInput = $('#questionInput').val();
     if (questionInput == "" || questionInput == null){
         var message = "Enter your question";
-        addTutorMessage(message, true, true);
+        sendTutorMessage(message);
         return;
     }
 
     var answerInput = $('#answerInput').val();
     if (answerInput == "" || answerInput == null){
         var message = "Enter your answer";
-        addTutorMessage(message, true, true);
+        sendTutorMessage(message);
         return;
     }
     
+    sendMyMessage("Q : " + questionInput + " \n" + "A : " + answerInput);
+
     $.ajax({
         url : '/qna/set/qna',
         type : 'POST',
+        contentType: 'application/json',
         headers: getHeaderToken(),
-        data : {questionInput,answerInput},
+        data : JSON.stringify({questionInput,answerInput}),
         success : function(data, status, request) {
             var message = "I get your question and answer successfully!"
-            addTutorMessage(message, true, true);
+            sendTutorMessage(message);
             changeTo("menu");
       },
       error:function(request, textStatus, error){
@@ -201,17 +215,62 @@ function sendQnA(){
 }
 
 function sendTimeSet(){
-    var times = $('.timeText');
+    var times = []
+    $('.timeText').each(function(index,item){
+        times.push($(this).val());
+        
+      });
 
     $.ajax({
         url : '/qna/set/alarmTime',
         type : 'POST',
-        data: times,
+        contentType: 'application/json',
+        data: JSON.stringify(times),
         headers: getHeaderToken(),
         success : function(data, status, request) {
-            var message = "I set your schedules successfully!"
-            addTutorMessage(message, true, true);
+            var message = "I set your schedules successfully! I will send an alarm email according to this schedule. "
+            sendTutorMessage(message);
             changeTo("menu");
+      },
+      error:function(request, textStatus, error){
+        printError(request, textStatus, error)
+    }
+    });
+}
+
+function deleteQnA(button){
+    $.ajax({
+        url : '/qna/delete/question?questionIdx=' + button.getAttribute("data"),
+        type : 'GET',
+        headers: getHeaderToken(),
+        success : function(data, status, request) {
+            var message = "I delete your QnA successfully! "
+            sendTutorMessage(message);
+      },
+      error:function(request, textStatus, error){
+        printError(request, textStatus, error)
+    }
+    });
+
+    changeTo("menu");
+}
+
+function getTimeSet(){
+  
+    $.ajax({
+        url : '/qna/get/alarmTime',
+        type : 'GET',
+        headers: getHeaderToken(),
+        success : function(data, status, request) {
+            $('.timeText').each(function(index,item){
+                $(this).val('');
+              });
+            var idx = 0;
+            $('.timeText').each(function(index,item){  
+                if (data.length > idx) 
+                    $(this).val(data[idx].time);
+                idx++;
+            });
       },
       error:function(request, textStatus, error){
         printError(request, textStatus, error)

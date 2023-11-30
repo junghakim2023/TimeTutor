@@ -26,3 +26,6 @@ function printError(request, textStatus, error){
     console.log(JSON.stringify(error));
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
