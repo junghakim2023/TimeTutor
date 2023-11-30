@@ -63,9 +63,7 @@ function sendTutorMessage(message, questionNum){
             //        
       },
         error:function(request, textStatus, error){
-            console.log(JSON.stringify(request))
-            console.log(JSON.stringify(textStatus))
-            console.log(JSON.stringify(error))
+            pringError(request, textStatus, error)
         }
         });
 

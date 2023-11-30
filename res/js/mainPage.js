@@ -25,9 +25,7 @@ function initPage() {
             init(data);         
       },
         error:function(request, textStatus, error){
-            console.log(JSON.stringify(request))
-            console.log(JSON.stringify(textStatus))
-            console.log(JSON.stringify(error))
+            pringError(request, textStatus, error)
         }
         });
 }       
@@ -47,9 +45,7 @@ function renewAccessToken(){
             setLoginStatus(true);
         },
         'error':function(request, textStatus, error){
-            console.log(JSON.stringify(request))
-            console.log(JSON.stringify(textStatus))
-            console.log(JSON.stringify(error))
+            pringError(request, textStatus, error)
             logout();
             setLoginStatus(false);
         }
@@ -70,9 +66,7 @@ function checkLogin(){
             setLoginStatus(valid);
         },
         'error':function(request, textStatus, error){
-            console.log(JSON.stringify(request))
-            console.log(JSON.stringify(textStatus))
-            console.log(JSON.stringify(error))
+            pringError(request, textStatus, error)
 
             setLoginStatus(valid);
         }
@@ -125,9 +119,7 @@ function setTokenInfo(tokenKey){
             if (request.code == 501)
                 renewAccessToken()
             else{
-                console.log(JSON.stringify(request))
-                console.log(JSON.stringify(textStatus))
-                console.log(JSON.stringify(error))
+                pringError(request, textStatus, error)
                 setLoginStatus(false);
             }
         }
