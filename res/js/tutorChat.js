@@ -85,6 +85,10 @@ function changeTo(area){
         }
     }
 
+    $('#questionInput').val('')
+    $('#answerInput').val('')
+    $('#chatInput').val('')
+
     $("#buttonMenueArea").css("display", menuAreaShow);
     $("#qnaArea").css("display", qnaAreaShow);
     $("#qnaMakingArea").css("display", qnaMakerAreaShow);
@@ -166,7 +170,6 @@ function sendAnswer(){
     sendMyMessage("A : " + answer);
     addTutorDiff(questionInfo, answer);
 
-    $('#chatInput').val('')
     questionInfo = null;
     changeTo("menu");
 }
@@ -224,8 +227,6 @@ function sendQnA(){
             var message = "I get your question and answer successfully!"
             sendTutorMessage(message);
             changeTo("menu");
-            $('#questionInput').val('')
-            $('#answerInput').val('')
       },
       error:function(request, textStatus, error){
         printError(request, textStatus, error)
