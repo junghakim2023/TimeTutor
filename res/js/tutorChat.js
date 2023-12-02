@@ -78,9 +78,11 @@ function changeTo(area){
         case "reschedule":
             rescheduleAreaShow =  "block";
             break;
-        case "menu":
+        case "menu":{
             menuAreaShow =  "block";
+            $("#chattingArea").css("height", "92%");
             break;
+        }
     }
 
     $("#buttonMenueArea").css("display", menuAreaShow);
@@ -96,6 +98,8 @@ function qnaMakingBtnClick (){
         return;
     }
     changeTo("qnaMaking");
+
+    $("#chattingArea").css("height", "80%");
 }
 
 
