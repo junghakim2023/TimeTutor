@@ -56,6 +56,7 @@ function getPreviousMessage(){
                 setPreviousMessage(data);
       },
         error:function(request, textStatus, error){
+            sayToGuest();
             printError(request, textStatus, error)
         }
         });
