@@ -16,8 +16,8 @@ router.route('/get/question')
 router.route('/delete/question')
 .get(qnaService.deleteQnA);
 
-router.route('/set/answer')
-.post(qnaService.setAnswer)
+router.route('/answer/result')
+.get(qnaService.setAnswerResult)
 
 router.route('/get/alarmTime')
 .get(qnaService.getAlarmTime)

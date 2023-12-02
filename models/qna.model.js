@@ -17,7 +17,16 @@ module.exports = (sequelize, DataTypes) => {
       user_index: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
-      }
+      },
+      correct: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+
+      },
+      bad: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
+      },
     }, {
       charset: 'utf8',
       collate: 'utf_general_ci',
@@ -28,8 +37,24 @@ module.exports = (sequelize, DataTypes) => {
       return Qna.create({
         question: question,
         user_index: userIndex,
-        answer: answer
+        answer: answer,
+        correct: 0,
+        bad:0
       });
+    };
+    
+    Qna.increaseCorrect = async (qnaIdx) => {
+      return await Qna.update(
+        { correct: sequelize.literal('correct + 1') },
+        { where: { idx: qnaIdx } }
+      );
+    };
+
+    Qna.increaseBad = async (qnaIdx) => {
+      return await Qna.update(
+        { bad: sequelize.literal('bad + 1') },
+        { where: { idx: qnaIdx } }
+      );
     };
   
     return Qna;

@@ -1,5 +1,24 @@
+function extraTutorMessage(chatFromTutor, info){
+    chatFromTutor.find(".deleteBtn").attr("data", info.idx);
+    chatFromTutor.find(".deleteBtn").css("display","block");
 
-function addTutorMessage(message, slow, questionNum){
+    var correct = parseInt(info.correct);
+    var bad = parseInt(info.bad);
+    var correctRateText = chatFromTutor.find("#correctRate");
+    if (correct == 0 && bad == 0){
+        correctRateText.html("");
+    }
+    else{
+        let rate = correct/(correct + bad) * 100;
+        correctRateText.html("Correct : " + rate + "%");
+        if (rate <= 0 ) correctRateText.html("");
+        else if (rate <= 30) correctRateText.css("color", "red");
+        else if (rate <= 70) correctRateText.css("color", "orange");
+        else correctRateText.css("color", "green");
+    }
+}
+
+function addTutorMessage(message, slow, info){
     if (message == '' || message ==null)
         return;
 
@@ -8,9 +27,8 @@ function addTutorMessage(message, slow, questionNum){
             chatFromTutor.find("#sampleTutorText").text(message);
             chatFromTutor.css("visibility", "visible")
             chatFromTutor.appendTo("#chattingArea");
-            if (questionNum != undefined){
-                chatFromTutor.find(".deleteBtn").attr("data", questionNum);
-                chatFromTutor.find(".deleteBtn").css("display","block");
+            if (info != null || info != undefined){
+                extraTutorMessage(chatFromTutor, info);
             }
             $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
     }
@@ -25,22 +43,23 @@ function addTutorMessage(message, slow, questionNum){
     }
 }
 
-function addTutorDiff(originalAnswer, answer){
-    if (originalAnswer == '' || originalAnswer ==null)
+function addTutorDiff(questionInfo, answer){
+    if (questionInfo == '' || questionInfo ==null)
         return;
 
     if (answer == '' || answer ==null)
         return;
 
     var say = function(){
-         let output = window.htmldiff(originalAnswer, answer);
+         let output = window.htmldiff(questionInfo.answer, answer);
          var chatFromTutor = cloneTutor.clone();
         
-         
+         var correct = false;
          if (output.indexOf('<ins>') == -1 && output.indexOf('<del>') == -1){
              let check = "[very good] <br>";
              output = "<good>" + output + "</good>";
              chatFromTutor.find("#sampleTutorText").html(check + output);
+             correct = true;
          }else{
              let check = "[check] <br>";
              chatFromTutor.find("#sampleTutorText").html(check + output);
@@ -48,6 +67,9 @@ function addTutorDiff(originalAnswer, answer){
          
          chatFromTutor.css("visibility", "visible")
          chatFromTutor.appendTo("#chattingArea");
+         
+
+         sendAnswerResult(questionInfo, correct);
 
          $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
     }
@@ -83,7 +105,7 @@ function sendMyMessage(msg){
         });
 }
 
-function sendTutorMessage(message, questionNum){
+function sendTutorMessage(message, info){
     $.ajax({
         url : '/chat/say/tutor',
         type : 'POST',
@@ -98,5 +120,22 @@ function sendTutorMessage(message, questionNum){
         }
         });
 
-    addTutorMessage(message, true, questionNum);
+    addTutorMessage(message, true, info);
 }
+
+function sendAnswerResult(info, correct){
+    $.ajax({
+        url : '/qna/answer/result?questionIdx='+info.idx+"&correct="+correct,
+        type : 'GET',
+        contentType: 'application/json',
+        headers: getHeaderToken(),
+        success : function(message, status, request) {
+            //        
+      },
+        error:function(request, textStatus, error){
+            pringError(request, textStatus, error)
+        }
+        });
+}
+
+

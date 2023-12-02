@@ -1,5 +1,4 @@
 const db = require('../../models/index');
-const chatSequelize = db.chatSequelize; 
 const qnaSequelize = db.qnaSequelize; 
 const alarmSequelize = db.alarmSequelize; 
 
@@ -61,9 +60,17 @@ var getQuestion = function(req, res){
         return res.status(500).send(error);
       });
 }
-var setAnswer = function(req, res){    
-
+var setAnswerResult = function(req, res){    
+    var questionIdx = req.query.questionIdx;
+    var correct = req.query.correct;
     
+    console.log(correct);
+    console.log(correct == 'true');
+    if (correct == 'true')
+        qnaSequelize.increaseCorrect(questionIdx);
+    else
+        qnaSequelize.increaseBad(questionIdx);
+
     return res.send("OK");
 }
 
@@ -90,7 +97,6 @@ var deleteQnA = function(req, res){
 }
     return res.send("OK");
 }
+  
 
-
-
-module.exports = {setAlarmTime, getQuestion, setAnswer, setQnA, getAlarmTime, deleteQnA}
+module.exports = {setAlarmTime, getQuestion, setAnswerResult, setQnA, getAlarmTime, deleteQnA}

@@ -1,6 +1,6 @@
 var cloneMe;
 var cloneTutor;
-var originalAnswer;
+var questionInfo;
 cloneMe = $('#sampleYou').clone();
 cloneTutor = $('#sampleTutor').clone();
 
@@ -149,7 +149,7 @@ function sayToGuest(){
 }
 
 function sendAnswer(){
-    if (originalAnswer == '' || originalAnswer == null || originalAnswer == undefined){
+    if (questionInfo == '' || questionInfo == null || questionInfo == undefined){
         var message = "Wait until Question to be prepared";
         addTutorMessage(message, true);
         return;
@@ -164,12 +164,10 @@ function sendAnswer(){
 
     
     sendMyMessage("A : " + answer);
-
-    addTutorDiff(originalAnswer, answer);
-    //addTutorMessage("Your Answer : " + answer, true);
+    addTutorDiff(questionInfo, answer);
 
     $('#chatInput').val('')
-    originalAnswer = null;
+    questionInfo = null;
     changeTo("menu");
 }
 
@@ -182,12 +180,12 @@ function requestQuestion(){
         success : function(data, status, request) {
             if (data == null || data == ''){
                 var message = "There is no availiable Question. Make question first!"
-                sendTutorMessage(message, true, true);
+                sendTutorMessage(message);
                 return;
             }
 
-            originalAnswer = data.answer;
-            sendTutorMessage("Q : " + data.question, data.idx);
+            questionInfo = data;
+            sendTutorMessage("Q : " + data.question, data);
             changeTo("qna");
       },
         error:function(request, textStatus, error){
