@@ -162,10 +162,11 @@ function sendAnswer(){
         return;
     }
 
+    
     sendMyMessage("A : " + answer);
 
-    addTutorMessage("Answer : " + originalAnswer, true);
-    addTutorMessage("Your Answer : " + answer, true);
+    addTutorDiff(originalAnswer, answer);
+    //addTutorMessage("Your Answer : " + answer, true);
 
     $('#chatInput').val('')
     originalAnswer = null;

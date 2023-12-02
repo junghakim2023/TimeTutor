@@ -25,6 +25,37 @@ function addTutorMessage(message, slow, questionNum){
     }
 }
 
+function addTutorDiff(originalAnswer, answer){
+    if (originalAnswer == '' || originalAnswer ==null)
+        return;
+
+    if (answer == '' || answer ==null)
+        return;
+
+    var say = function(){
+         let output = window.htmldiff(originalAnswer, answer);
+         var chatFromTutor = cloneTutor.clone();
+        
+         
+         if (output.indexOf('<ins>') == -1 && output.indexOf('<del>') == -1){
+             let check = "[very good] <br>";
+             output = "<good>" + output + "</good>";
+             chatFromTutor.find("#sampleTutorText").html(check + output);
+         }else{
+             let check = "[check] <br>";
+             chatFromTutor.find("#sampleTutorText").html(check + output);
+         }
+         
+         chatFromTutor.css("visibility", "visible")
+         chatFromTutor.appendTo("#chattingArea");
+
+         $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
+    }
+
+    setTimeout(() => {say();  }, 800);
+    
+}
+
 function addMyMessage(message){
     var chatFromYou = cloneMe.clone();
     chatFromYou.find("#sampleYouText").text(message);

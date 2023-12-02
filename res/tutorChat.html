@@ -1,7 +1,25 @@
 <script id="utils"  src="/res/js/utils.js"></script>
+<script src="/res/js/htmldiff.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
     	body{margin-top:20px;}
+
+
+ins {
+  text-decoration: none;
+  background-color: #d4fcbc;
+}
+
+del {
+  text-decoration: line-through;
+  background-color: #fbb6c2;
+  color: #555;
+}
+
+good {
+    background-color: rgb(125, 213, 240);
+    color: #555;
+}
 
 .chat-online {
     color: #34ce57
@@ -110,6 +128,7 @@ Time tutor
 <div id="sampleTutorText">Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.</div>
 </div>
 <button style="display: none;" onclick="deleteQnA(this)" data="" class="btn btn-primary deleteBtn">Delete</button>
+<div id ="correctRate" style="color:red"> </div>
 </div>
 
 
