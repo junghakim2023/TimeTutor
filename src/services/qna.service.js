@@ -47,25 +47,45 @@ var getQuestion = function(req, res){
     var user = loginModule.getUserData(req);
 
     const qnaList =  qnaSequelize.findAll({
-        where: { user_index: user.userIdx },
-        order: [['createdAt', 'DESC']]
+        where: { user_index: user.userIdx }
       }).then(qnaList => {
         var length = qnaList.length;
         if (length <= 0)
             return res.send(null);
-        const randomNumber = Math.floor(Math.random() * length);
-        return res.send(qnaList[randomNumber]);
+
+        var pool = makePoolDependOnCorrectRate(qnaList);        
+        const randomNumber = Math.floor(Math.random() * Math.floor(pool.length));
+        return res.send(qnaList[pool[randomNumber]]);
       })
       .catch(error => {
         return res.status(500).send(error);
       });
 }
+
+function makePoolDependOnCorrectRate(qnaList){
+    var pool = [];
+    var index = 0;
+    
+    for (qna of qnaList){
+        var rate = 0;
+        if (qna.correct + qna.bad > 0)
+            rate = Math.floor(qna.correct/(qna.correct + qna.bad) * 10);
+        
+        let max = 12;
+        // add question as much as its correct rate
+        // ex) 30% -> push (max-3) in the pool
+        for (var i=0;i<max-rate;i++)
+            pool.push(index);
+
+        index++;
+    }
+    return pool;
+}
+
 var setAnswerResult = function(req, res){    
     var questionIdx = req.query.questionIdx;
     var correct = req.query.correct;
     
-    console.log(correct);
-    console.log(correct == 'true');
     if (correct == 'true')
         qnaSequelize.increaseCorrect(questionIdx);
     else

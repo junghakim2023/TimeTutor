@@ -9,7 +9,7 @@ function extraTutorMessage(chatFromTutor, info){
         correctRateText.html("");
     }
     else{
-        let rate = correct/(correct + bad) * 100;
+        let rate = (correct/(correct + bad) * 100).toFixed(2);
         correctRateText.html("Correct : " + rate + "%");
         if (rate <= 0 ) correctRateText.html("");
         else if (rate <= 30) correctRateText.css("color", "red");
@@ -51,7 +51,7 @@ function addTutorDiff(questionInfo, answer){
         return;
 
     var say = function(){
-         let output = window.htmldiff(questionInfo.answer, answer);
+         let output = window.htmldiff(answer, questionInfo.answer);
          var chatFromTutor = cloneTutor.clone();
         
          var correct = false;
