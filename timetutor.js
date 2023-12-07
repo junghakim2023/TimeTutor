@@ -6,7 +6,7 @@ dotenv.config();
 dotenv.config({ path: `.${process.env.NODE_ENV}.env`});
 
 var app = express();
-const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000', process.env.LOGIN_URL];
+const allowedOrigins = [process.env.CORS_1,process.env.CORS_2,process.env.CORS_3,process.env.LOGIN_URL];
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true, // Optional: Allow credentials (e.g., cookies, authorization headers)
