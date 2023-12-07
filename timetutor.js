@@ -1,10 +1,18 @@
 var express = require('express');
+const cors = require('cors');
 var dotenv = require('dotenv')
 dotenv.config();
 // todo : 
 dotenv.config({ path: `.${process.env.NODE_ENV}.env`});
 
 var app = express();
+const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000', process.env.LOGIN_URL];
+const corsOptions = {
+    origin: allowedOrigins,
+    credentials: true, // Optional: Allow credentials (e.g., cookies, authorization headers)
+};
+app.use(cors(corsOptions));
+
 const routes = require('./src/routers/timetutor.router'); 
 app.use(routes);
 
