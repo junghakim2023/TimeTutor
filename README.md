@@ -2,7 +2,8 @@
 A service that reminds you of what you have learned
 > http://ec2-3-99-218-40.ca-central-1.compute.amazonaws.com:8083/
 
-![image](https://github.com/junghakim2023/TimeTutor/assets/150854918/1f2d2f73-7ee7-49aa-a171-6ecbf4144e93)
+![image](https://github.com/junghakim2023/TimeTutor/assets/150854918/b8e2b22e-9a4c-404c-a52f-c6bcb099f9c8)
+
 
 
 # Publish
