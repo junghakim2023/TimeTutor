@@ -14,6 +14,8 @@ function logout(){
 function init(data){
     loginServerURL = data.loginURL;
     $('#loginBtn').click(function() {window.location.href = loginServerURL + "?redirection="+window.location.href;});
+    $('#signupBtn').click(function() {window.location.href = loginServerURL + "/signup?redirection="+window.location.href;});
+    
     $('.comming-soon').click(function() {alert("Comming soon!")});
 }
 
