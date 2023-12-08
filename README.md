@@ -1,5 +1,5 @@
 # TimeTutor
-A service that reminds you of what you have learned
+[Backend] A service that reminds you of what you have learned
 > http://ec2-3-99-218-40.ca-central-1.compute.amazonaws.com
 
 # [PC]
@@ -14,11 +14,11 @@ A service that reminds you of what you have learned
 - Jenkins (Version 2.426.1)
 - AWS (Amazon Linux)
 - RDS (mysql)
+- pm2
 
 # Setup
 - Visual Studio Code
 - Nodejs
-- bootstrap 5.0.2
 > **Frontend** https://github.com/junghakim2023/TimeTutor_React
 
 # Features
