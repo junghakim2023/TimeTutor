@@ -1,20 +1,25 @@
 # TimeTutor
-A service that reminds you of what you have learned
-> http://ec2-3-99-218-40.ca-central-1.compute.amazonaws.com:8083/
+[Backend] A service that reminds you of what you have learned
+> http://ec2-35-182-117-228.ca-central-1.compute.amazonaws.com
 
-![image](https://github.com/junghakim2023/TimeTutor/assets/150854918/b8e2b22e-9a4c-404c-a52f-c6bcb099f9c8)
+# [PC]
+![image](https://github.com/junghakim2023/TimeTutor/assets/150854918/3e5bd1d2-fe8f-4093-ab82-3ad1788a053a)
 
+
+# [MOBILE]
+![image](https://github.com/junghakim2023/TimeTutor/assets/150854918/21b5d193-4f68-4f33-975c-ea4be109c0bb)
 
 
 # Publish
 - Jenkins (Version 2.426.1)
 - AWS (Amazon Linux)
 - RDS (mysql)
+- pm2
 
 # Setup
 - Visual Studio Code
 - Nodejs
-- bootstrap 5.0.2
+> **Frontend** https://github.com/junghakim2023/TimeTutor_React
 
 # Features
 - Manage learning content to be reminded
